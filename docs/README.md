@@ -2,7 +2,7 @@
 
 # SqlMap Documentation
 
-SqlMap is a data-mapper layer that maps SQL statements defined in XML files to PHP objects. It originated in the Java iBATIS project and provides a clean separation between SQL and application code by keeping all queries in XML mapping files rather than embedded in PHP. [MyBATIS](https://mybatis.org/mybatis-3/) is the current actively maintained successor to iBATIS. This library covers the PRADO PHP framework implementation of the SqlMap pattern.
+SqlMap is a data-mapper layer that maps SQL statements defined in XML files to PHP objects. It is a PHP port of iBATIS.NET DataMapper, the C# edition of the Java iBATIS project, and provides a clean separation between SQL and application code by keeping all queries in XML mapping files rather than embedded in PHP. [MyBATIS](https://mybatis.org/mybatis-3/) is the current actively maintained successor to iBATIS. This library covers the PRADO PHP framework implementation of the SqlMap pattern.
 
 ## Contents
 

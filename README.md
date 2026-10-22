@@ -2,7 +2,7 @@
 
 SqlMap Data Mapper extension for the [PRADO PHP Framework](https://github.com/pradosoft/prado).
 
-SqlMap maps SQL statements to PHP objects using XML configuration files. Queries, inserts, updates, and deletes are defined in XML; the gateway executes them and maps result rows to objects or arrays automatically. prado-sqlmap implements the iBATIS SQL Maps 2 specification; [MyBATIS](https://mybatis.org) is the actively maintained successor with extensive reference documentation.
+SqlMap maps SQL statements to PHP objects using XML configuration files. Queries, inserts, updates, and deletes are defined in XML; the gateway executes them and maps result rows to objects or arrays automatically. prado-sqlmap is a PHP port of the iBATIS DataMapper (SQL Maps 2), whose Java line continues today as [MyBatis](https://github.com/mybatis/mybatis-3). The MyBatis documentation is a useful reference for the shared concepts. See [History](#history).
 
 ## Requirements
 
@@ -897,6 +897,14 @@ src/Data/SqlMap/
 → result row
 → `TResultMap` property mapping
 → returned object
+
+## History
+
+Clinton Begin started iBATIS in 2001, and its SQL Maps component (2002) mapped SQL kept in XML files to Java objects. iBATIS 2.0 shipped in June 2004, and the project moved to the Apache Software Foundation, where a C# edition, iBATIS.NET DataMapper, was also developed. Wei Zhuo ported iBATIS.NET DataMapper to PHP for PRADO in April 2006, and it first shipped as SQLMap in PRADO 3.1.0 (alpha, January 15, 2007). In May 2010 the iBATIS team published iBATIS 3.0 and continued development under the name MyBatis on Google Code. Apache retired iBATIS to the Apache Attic in June 2010. MyBatis moved to GitHub in November 2013 and is maintained at [mybatis/mybatis-3](https://github.com/mybatis/mybatis-3). PRADO's SqlMap stayed in the framework through PRADO 4.3 and moved to this package for PRADO 4.4 in 2026.
+
+## Versioning
+
+The package has its own version line, starting at 1.0.0, independent of the PRADO framework version. The first release pairs with PRADO 4.4, the release that removes SqlMap from the framework. Point releases stay backward compatible. Changes are listed in the [changelog](CHANGELOG.md).
 
 ## License
 

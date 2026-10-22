@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-First standalone release. SqlMap moves out of the PRADO framework (`framework/Data/SqlMap`) into this package. Namespaces and class names are unchanged. The baseline is the framework copy in PRADO `master` at commit `2c7e90da` (2026-10-21), including every SqlMap fix made there through pradosoft/prado#1330. The entries below are differences from that baseline. See the [migration guide](docs/migration.md) for upgrade steps.
+First standalone release, planned as 1.0.0, for PRADO 4.4. SqlMap moves out of the PRADO framework (`framework/Data/SqlMap`) into this package. Namespaces and class names are unchanged. The baseline is the framework copy in PRADO `master` at commit `2c7e90da` (2026-10-21), including every SqlMap fix made there through pradosoft/prado#1330. The entries below are differences from that baseline. See the [migration guide](docs/migration.md) for upgrade steps.
 
 ### Added
 
