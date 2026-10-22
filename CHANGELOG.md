@@ -29,3 +29,4 @@ First standalone release, planned as 1.0.0, for PRADO 4.4. SqlMap moves out of t
 - `TCachingStatement::executeInsert()` delegates to the wrapped statement. It previously called itself until the stack overflowed.
 - `TParameterProperty::__sleep()` and `TResultProperty::__sleep()` name private properties by their namespaced class, so properties at their default values are left out of the serialized form. `TResultProperty` also misspelled `_propertyName`.
 - `TResultProperty::getPropertyValueType()` no longer calls a method on `null` when no reflection class is found for the type.
+- `TPropertyAccess::get()` and `has()` read `ArrayAccess` objects through `offsetExists()` and `offsetGet()`. `array_key_exists()` threw a `TypeError` for these objects on PHP 8 (#6).

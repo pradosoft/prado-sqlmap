@@ -204,6 +204,28 @@ class TPropertyAccessTest extends PHPUnit\Framework\TestCase
 		self::expectException(Prado\Data\SqlMap\DataMapper\TInvalidPropertyException::class);
 		TPropertyAccess::get($testobj, 'a.d.C');
 	}
+
+	public function testArrayAccessObject()
+	{
+		$map = new \Prado\Collections\TMap(['a' => 'foo', 'n' => null, 'c' => ['d' => 'bar']]);
+
+		self::assertEquals('foo', TPropertyAccess::get($map, 'a'));
+		self::assertNull(TPropertyAccess::get($map, 'n'));
+		self::assertEquals('bar', TPropertyAccess::get($map, 'c.d'));
+		self::assertTrue(TPropertyAccess::has($map, 'a'));
+		self::assertTrue(TPropertyAccess::has($map, 'c.d'));
+		self::assertFalse(TPropertyAccess::has($map, 'z'));
+		self::assertFalse(TPropertyAccess::has($map, 'c.z'));
+
+		$testobj = new _PropertyAccessTestHelperPublicVar();
+		TPropertyAccess::set($testobj, 'a', $map);
+		self::assertEquals('foo', TPropertyAccess::get($testobj, 'a.a'));
+		TPropertyAccess::set($testobj, 'a.b', 'baz');
+		self::assertEquals('baz', $map['b']);
+
+		self::expectException(Prado\Data\SqlMap\DataMapper\TInvalidPropertyException::class);
+		TPropertyAccess::get($map, 'z');
+	}
 }
 
 
