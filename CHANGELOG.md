@@ -10,6 +10,7 @@ First standalone release, planned as 1.0.0, for PRADO 4.4. SqlMap moves out of t
 
 ### Added
 
+- An `<insert>`, `<update>`, or `<delete>` statement with a `cacheModel` attribute flushes that cache model when it executes, the same as a `<flushOnExecute>` entry. The attribute was previously accepted and ignored (#5).
 - `composer.json` declares `extra.prado` for PRADO 4.4: `bootstrap` (`TSqlMapConfig`), `error-messages` (`src/Data/SqlMap/DataMapper/messages.txt`), and `class-map` (`config/classes.json`). The legacy top-level `extra.bootstrap` remains for PRADO 4.3.
 - `config/classes.json` maps the 55 SqlMap short class names (`TSqlMapConfig`, `TSqlMapFifoCache`, ...) to their FQNs. It replaces the SqlMap entries of the framework's `classes.php`.
 - Message text for five codes that were thrown without a definition: `sqlmap_can_not_extend_select_key`, `sqlmap_configfile_invalid`, `sqlmap_must_enable_custom_paging`, `sqlmap_property_must_be_list`, `sqlmap_use_set_to_store_cache`.

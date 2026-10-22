@@ -141,6 +141,14 @@ Assign the cache model to the `SELECT` that should be invalidated:
 
 When `TSqlMapGateway::update('UpdateAccount', ...)` executes, SqlMap automatically flushes `AccountCache`, so subsequent calls to `GetAccountById` return fresh data.
 
+A `cacheModel` attribute on an `<insert>`, `<update>`, or `<delete>` statement has the same effect as listing the statement in `flushOnExecute`:
+
+```xml
+<update id="UpdateAccount" parameterClass="Account" cacheModel="AccountCache">
+    UPDATE accounts SET account_email = #EmailAddress# WHERE account_id = #Id#
+</update>
+```
+
 See [cacheModel](../configuration/README.md#cachemodel) for the full cache model reference.
 
 ---

@@ -111,7 +111,7 @@ A [`<parameterMap>`](../mappings/parameterMap.md) gives explicit control over ty
 
 ### Cache invalidation
 
-Any [`<cacheModel>`](../configuration/cacheModel.md) that lists this statement's `id` in a `<flushOnExecute>` element is flushed when the delete executes successfully. This behavior is identical to [`<update>`](update.md).
+Any [`<cacheModel>`](../configuration/cacheModel.md) that lists this statement's `id` in a `<flushOnExecute>` element is flushed when the delete executes successfully. A `cacheModel` attribute on the `<delete>` flushes the named cache model the same way. This behavior is identical to [`<update>`](update.md).
 
 ```xml
 <cacheModel id="accountCache" implementation="LRU">
