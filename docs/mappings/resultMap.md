@@ -173,7 +173,7 @@ The corresponding query joins the two tables:
 </select>
 ```
 
-SqlMap iterates the result set, grouping by `Id`. For each unique `Account_Id` value it creates one `AccountWithOrders` object. Each `Order_*` row is mapped via `account-orders` and appended to the parent's `Orders` collection.
+SqlMap iterates the result set, grouping by `Id`. For each unique `Account_Id` value it creates one `AccountWithOrders` object. Each `Order_*` row is mapped via `account-orders` and appended to the parent's `Orders` collection. An account without orders has null in every `Order_*` column; it is returned with an empty `Orders` collection.
 
 ---
 

@@ -43,16 +43,15 @@ class TSqlMapObjectCollectionTreeTest extends PHPUnit\Framework\TestCase
 
 	public function test_zappable_entries_populated_in_sleep()
 	{
-		// A root-only add populates _entries but NOT _tree
+		// A root-only add populates _entries and _tree
 		$this->tree->add(null, 'root', ['object' => new stdClass(), 'property' => null]);
 
 		$sleepKeys = $this->tree->__sleep();
 		$cn = TSqlMapObjectCollectionTree::class;
 
-		// _entries is non-empty — should appear in __sleep()
 		$this->assertContains("\0$cn\0_entries", $sleepKeys);
-		// _tree is still empty after root-only add — should be absent
-		$this->assertNotContains("\0$cn\0_tree", $sleepKeys);
+		$this->assertContains("\0$cn\0_tree", $sleepKeys);
+		$this->assertNotContains("\0$cn\0_list", $sleepKeys);
 	}
 
 	public function test_zappable_tree_populated_in_sleep()
@@ -124,18 +123,38 @@ class TSqlMapObjectCollectionTreeTest extends PHPUnit\Framework\TestCase
 		$this->assertSame(2, $parentObj->items->getCount());
 	}
 
-	public function test_collect_root_only_no_children_empty_result()
+	public function test_collect_root_without_children()
 	{
-		// A root node with no children: after collect() the root-only collect
-		// goes through collectChildren, processes it, calls onChildNodesVisited(null, [root])
-		// which returns early due to empty parent.
-		// So result is [].
+		// A root node with no children is collected with its list unchanged.
 		$parentObj = new stdClass();
+		$parentObj->items = [];
 		$this->tree->add(null, 'p1', ['object' => $parentObj, 'property' => null]);
 
-		// No children added — _tree is empty, so collect() loop exits immediately
 		$result = $this->tree->collect();
-		$this->assertSame([], $result);
+		$this->assertSame([$parentObj], $result);
+		$this->assertSame([], $parentObj->items);
+	}
+
+	public function test_collect_keeps_root_order_with_and_without_children()
+	{
+		$p1 = new stdClass();
+		$p1->items = [];
+		$p2 = new stdClass();
+		$p2->items = [];
+		$p3 = new stdClass();
+		$p3->items = [];
+		$child = new stdClass();
+
+		$this->tree->add(null, 'p1', ['object' => $p1, 'property' => null]);
+		$this->tree->add(null, 'p2', ['object' => $p2, 'property' => null]);
+		$this->tree->add('p2', 'c1', '');
+		$this->tree->add('p2', 'c1', ['object' => $child, 'property' => 'items']);
+		$this->tree->add(null, 'p3', ['object' => $p3, 'property' => null]);
+
+		$this->assertSame([$p1, $p2, $p3], $this->tree->collect());
+		$this->assertSame([], $p1->items);
+		$this->assertSame([$child], $p2->items);
+		$this->assertSame([], $p3->items);
 	}
 
 	public function test_serialization_round_trip()

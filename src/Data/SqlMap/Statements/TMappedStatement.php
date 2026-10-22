@@ -664,7 +664,8 @@ class TMappedStatement extends \Prado\TComponent implements IMappedStatement
 
 	/**
 	 * ResultMap with GroupBy property. Save object collection graph in a tree
-	 * and collect the result later.
+	 * and collect the result later. A nested result map without row data, such as
+	 * the right side of a LEFT JOIN with no match, adds no element to the collection.
 	 * @param TResultMap $resultMap result mapping details.
 	 * @param array $row a result set row retrieved from the database
 	 * @param mixed $parent
@@ -688,6 +689,9 @@ class TMappedStatement extends \Prado\TComponent implements IMappedStatement
 			//nested property
 			if ($this->getManager()->getResultMaps()->contains($nested)) {
 				$nestedMap = $this->getManager()->getResultMap($nested);
+				if (!$this->hasResultMapRowData($nestedMap, $row)) {
+					continue;
+				}
 				$groupKey = $this->getResultMapGroupKey($nestedMap, $row);
 
 				//add the node reference first
@@ -708,6 +712,38 @@ class TMappedStatement extends \Prado\TComponent implements IMappedStatement
 			}
 		}
 		return $resultObject;
+	}
+
+	/**
+	 * Checks whether a row holds a value for any column of a result map.
+	 * A LEFT JOIN row without a matching right-side row is null in every column
+	 * of the nested result map. Column names match case-insensitively when no
+	 * exact match exists.
+	 * @param TResultMap $resultMap result mapping details.
+	 * @param array $row a result set row retrieved from the database
+	 * @return bool true if a mapped column is not null or the map has no column mappings.
+	 */
+	protected function hasResultMapRowData($resultMap, $row)
+	{
+		$hasColumns = false;
+		foreach ($resultMap->getColumns() as $property) {
+			$column = $property->getColumn();
+			if ($column === null || $column === '') {
+				continue;
+			}
+			$hasColumns = true;
+			$index = $property->getColumnIndex();
+			if (($index > 0 && isset($row[$index])) || isset($row[$column])) {
+				return true;
+			}
+			$columnLower = strtolower($column);
+			foreach ($row as $key => $value) {
+				if ($value !== null && strtolower((string) $key) === $columnLower) {
+					return true;
+				}
+			}
+		}
+		return !$hasColumns;
 	}
 
 	/**
