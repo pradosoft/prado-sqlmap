@@ -3,6 +3,7 @@
 	<cacheModel id="shared-cache" implementation="LRU" />
 	<cacheModel id="listed-cache" implementation="LRU">
 		<flushOnExecute statement="UpdateListed"/>
+		<flushOnExecute statement="UpdateListedAndCached"/>
 	</cacheModel>
 
 	<select id="SelectCached" cacheModel="shared-cache">SELECT a FROM t</select>
@@ -11,4 +12,6 @@
 	<delete id="DeleteCached" cacheModel="shared-cache">DELETE FROM t</delete>
 	<update id="UpdateUncached">UPDATE t SET a = 2</update>
 	<update id="UpdateListed">UPDATE t SET a = 3</update>
+	<update id="UpdateListedAndCached" cacheModel="listed-cache">UPDATE t SET a = 4</update>
+	<delete id="DeleteOtherFileCache" cacheModel="other-cache">DELETE FROM t WHERE a = 5</delete>
 </sqlMap>

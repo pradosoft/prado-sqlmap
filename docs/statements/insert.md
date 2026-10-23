@@ -43,8 +43,9 @@ Full example showing both `pre` and `post` key retrieval patterns:
 | `id` | Yes | Unique identifier within the namespace. Passed to [`TSqlMapGateway::insert()`](#tsqlmapgatewayinsert) as `$statementName`. |
 | `parameterClass` | No | Fully qualified PHP class name (or primitive alias) of the parameter object. Used when no explicit `parameterMap` is needed; SqlMap maps `#property#` tokens directly to object properties. |
 | `parameterMap` | No | Reference to a named [`<parameterMap>`](../mappings/parameter-map.md). Takes precedence over `parameterClass` when both are present. Used for positional `?` placeholders or explicit type/null-value control. |
+| `cacheModel` | No | Name of a [`<cacheModel>`](../configuration/cacheModel.md) that is flushed when the insert executes. |
 
-The `insert` element does not support `resultClass`, `resultMap`, or `listClass`. It returns only a generated key or `null`. A `cacheModel` attribute names a cache model that the insert flushes when it executes.
+The `insert` element does not support `resultClass`, `resultMap`, or `listClass`. It returns only a generated key or `null`.
 
 ---
 

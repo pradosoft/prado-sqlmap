@@ -348,6 +348,16 @@
 		Account_ID = #Id#
 	</update>
 
+	<update id="UpdateAccountViaCacheModel" cacheModel="account-cache"
+		parameterClass="Account">
+		update Accounts set
+		Account_FirstName = #FirstName#,
+		Account_LastName = #LastName#,
+		Account_Email = #EmailAddress, nullValue=no_email@provided.com#
+		where
+		Account_ID = #Id#
+	</update>
+
 	<insert id="InsertAccountViaInlineParameters"
 		parameterClass="Account" >
 		insert into Accounts 

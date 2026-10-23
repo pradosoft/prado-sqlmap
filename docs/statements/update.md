@@ -24,6 +24,7 @@ The SQL body is a plain SQL `UPDATE` string. Inline parameter tokens (`#property
 | `id` | Yes | Unique name for this statement within the mapping file. Used as the key passed to `TSqlMapGateway::update()`. |
 | `parameterClass` | No | Fully qualified class name (or [type alias](../configuration/README.md#typealias)) of the parameter object. When omitted, SqlMap accepts any object or associative array. |
 | `parameterMap` | No | Name of a [`parameterMap`](../mappings/README.md#parametermap) defined in this or another mapping file. Mutually exclusive with inline `#property#` tokens; use one or the other. |
+| `cacheModel` | No | Name of a [`cacheModel`](../configuration/cacheModel.md) that is flushed when the update executes. See [Cache invalidation](#cache-invalidation-via-flushonexecute). |
 
 `update` does not support `resultClass` or `resultMap` — the only return value is the affected-row count.
 

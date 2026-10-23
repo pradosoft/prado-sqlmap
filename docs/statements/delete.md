@@ -25,6 +25,7 @@ The body is the SQL text to execute. [Inline parameters](../dynamic-sql/inline-p
 | `id` | Yes | Unique identifier for the statement within its namespace. Passed to [`TSqlMapGateway::delete()`](../../src/Data/SqlMap/TSqlMapGateway.php) as the first argument. |
 | `parameterClass` | No | Fully qualified PHP class name (or primitive alias) of the input parameter. When omitted, the framework infers the type from the value passed at runtime. |
 | `parameterMap` | No | References a named [`<parameterMap>`](../mappings/parameterMap.md) that defines explicit column-to-property bindings. `parameterClass` and `parameterMap` are mutually exclusive; prefer `parameterClass` with inline parameters for simple cases. |
+| `cacheModel` | No | Name of a [`<cacheModel>`](../configuration/cacheModel.md) that is flushed when the delete executes. See [Cache invalidation](#cache-invalidation). |
 
 ---
 

@@ -9,7 +9,7 @@ class TSqlMapCacheModelFlushTest extends PHPUnit\Framework\TestCase
 	protected function setUp(): void
 	{
 		$this->manager = new TSqlMapManager();
-		$this->manager->configureXml(__DIR__ . '/../maps/cache-flush.xml');
+		$this->manager->configureXml(__DIR__ . '/../maps/cache-flush-config.xml');
 	}
 
 	private function executes(string $statementID, string $cacheID): bool
@@ -38,9 +38,25 @@ class TSqlMapCacheModelFlushTest extends PHPUnit\Framework\TestCase
 		$this->assertFalse($this->executes('UpdateUncached', 'shared-cache'));
 	}
 
+	public function testWriteStatementFlushesOnlyItsOwnCacheModel()
+	{
+		$this->assertFalse($this->executes('UpdateCached', 'listed-cache'));
+		$this->assertFalse($this->executes('UpdateListed', 'shared-cache'));
+	}
+
 	public function testFlushOnExecuteFlushesCache()
 	{
 		$this->assertTrue($this->executes('UpdateListed', 'listed-cache'));
-		$this->assertFalse($this->executes('UpdateCached', 'listed-cache'));
+	}
+
+	public function testStatementListedAndWithCacheModelFlushesCache()
+	{
+		$this->assertTrue($this->executes('UpdateListedAndCached', 'listed-cache'));
+	}
+
+	public function testCacheModelInAnotherMappingFile()
+	{
+		$this->assertTrue($this->executes('UpdateInOtherFile', 'shared-cache'));
+		$this->assertTrue($this->executes('DeleteOtherFileCache', 'other-cache'));
 	}
 }

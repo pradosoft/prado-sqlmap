@@ -2,7 +2,7 @@
 
 # cacheModel
 
-A `cacheModel` defines a named cache that [`select`](../mapping/select.md) statements reference to avoid repeated database round-trips. Results returned by a cached select are stored in the cache; subsequent calls with the same statement and parameters return the cached value without hitting the database.
+A `cacheModel` defines a named cache that [`select`](../mapping/select.md) statements reference to avoid repeated database round-trips. Results returned by a cached select are stored in the cache; subsequent calls with the same statement and parameters return the cached value without hitting the database. An `insert`, `update`, or `delete` statement that references the cache model flushes it when it executes.
 
 Cache models are declared inside a [mapping file](../mapping/README.md) and are global to the [`TSqlMapManager`](../api/TSqlMapManager.md) instance.
 
@@ -32,7 +32,7 @@ Cache models are declared inside a [mapping file](../mapping/README.md) and are 
 
 | Attribute | Required | Values | Description |
 |---|---|---|---|
-| `id` | yes | string | Unique identifier for this cache model within the SqlMap. Referenced by `cacheModel` on select statements. |
+| `id` | yes | string | Unique identifier for this cache model within the SqlMap. Referenced by the `cacheModel` attribute of statements. |
 | `implementation` | no | `LRU`, `FIFO`, `Basic` | Cache strategy. Defaults to `Basic` ([`TSqlMapApplicationCache`](../api/TSqlMapApplicationCache.md)). |
 | `readOnly` | no | `true`/`false` | Reserved for future use; not currently enforced by the runtime. |
 | `serialize` | no | `true`/`false` | Reserved for future use; not currently enforced by the runtime. |
@@ -105,6 +105,18 @@ Add the `cacheModel` attribute to a `select` statement to enable caching for it.
 ```
 
 When the same statement is executed with the same parameter, the result is returned from the cache. The cache key is derived from the statement id and a hash of the parameter object.
+
+## Attaching to a write statement
+
+The `cacheModel` attribute on an `insert`, `update`, or `delete` statement flushes the named cache model when the statement executes. It has the same effect as a `flushOnExecute` element that names the statement. The cache model may be declared in any mapping file.
+
+```xml
+<update id="updateAccount"
+        parameterClass="Account"
+        cacheModel="accountCache">
+    UPDATE accounts SET account_email = #EmailAddress# WHERE account_id = #Id#
+</update>
+```
 
 ## APPLICATION cache
 

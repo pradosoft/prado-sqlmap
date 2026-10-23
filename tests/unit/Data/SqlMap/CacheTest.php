@@ -93,6 +93,22 @@ abstract class CacheTest extends BaseCase
 	}
 
 	/**
+	 * An update with a cacheModel attribute flushes that cache when it executes.
+	 */
+	public function testFlushDataCacheOnExecuteViaCacheModelAttribute()
+	{
+		$list1 = self::$sqlmap->queryForList("GetCachedAccountsViaResultMap");
+		$list2 = self::$sqlmap->queryForList("GetCachedAccountsViaResultMap");
+
+		$this->assertTrue($list1 === $list2);
+		self::$sqlmap->update("UpdateAccountViaCacheModel", $list1[0]);
+
+		$list3 = self::$sqlmap->queryForList("GetCachedAccountsViaResultMap");
+
+		$this->assertTrue($list1 !== $list3);
+	}
+
+	/**
 	 */
 	protected function getCacheModel()
 	{
