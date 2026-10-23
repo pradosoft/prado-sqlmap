@@ -10,8 +10,6 @@
 
 namespace Prado\Data\SqlMap\DataMapper;
 
-use Prado\Exceptions\TInvalidDataValueException;
-
 /**
  * TPropertyAccess class provides dot notation stype property access and setting.
  *
@@ -38,6 +36,11 @@ use Prado\Exceptions\TInvalidDataValueException;
  * echo TPropertyAccess::get($obj, 'property1.property2.property3');
  * ```
  *
+ * Each segment of the path is resolved by the type of the current value:
+ * - array → the key, which must exist
+ * - `\ArrayAccess` object → `offsetExists()` and `offsetGet()`
+ * - other object → the `get`/`set` method, then the public property, then `__get`/`__set`
+ *
  * @author Wei Zhuo <weizho[at]gmail[dot]com>
  * @since 3.1
  */
@@ -47,7 +50,7 @@ class TPropertyAccess
 	 * Gets the property value.
 	 * @param mixed $object object or path.
 	 * @param string $path property path.
-	 * @throws TInvalidDataValueException if property path is invalid.
+	 * @throws TInvalidPropertyException if property path is invalid.
 	 * @return mixed property value.
 	 */
 	public static function get($object, $path)
@@ -88,6 +91,7 @@ class TPropertyAccess
 	}
 
 	/**
+	 * Checks whether every segment of the property path resolves.
 	 * @param mixed $object object or array
 	 * @param string $path property path.
 	 * @return bool true if property path is valid
@@ -134,7 +138,8 @@ class TPropertyAccess
 	 * @param mixed $originalObject by reference, object or array
 	 * @param string $path property path.
 	 * @param mixed $value new property value.
-	 * @throws TInvalidDataValueException if property path is invalid.
+	 * @throws TInvalidPropertyException if property path is invalid or the
+	 * target is not an array or object.
 	 */
 	public static function set(&$originalObject, $path, $value)
 	{
