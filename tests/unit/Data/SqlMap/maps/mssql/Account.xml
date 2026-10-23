@@ -562,9 +562,23 @@
 		</select>
 
 		<select id="getAccountWithEarlyOrders" resultMap="Account-with-Orders">
-			SELECT * FROM accounts 
-				LEFT JOIN orders ON
-					accounts.account_id = orders.account_id AND orders.order_id IN (1, 2, 3)
+			SELECT
+				Accounts.Account_Id as Account_ID,
+				Accounts.Account_FirstName as Account_FirstName,
+				Accounts.Account_LastName as Account_LastName,
+				Accounts.Account_Email as Account_Email,
+				Orders.Order_Id as Order_Id,
+				Orders.Order_Date as Order_Date,
+				Orders.Order_CardType as Order_CardType,
+				Orders.Order_CardNumber as Order_CardNumber,
+				Orders.Order_CardExpiry as Order_CardExpiry,
+				Orders.Order_Street as Order_Street,
+				Orders.Order_City as Order_City,
+				Orders.Order_Province as Order_Province,
+				Orders.Order_PostalCode as Order_PostalCode
+				FROM Accounts
+				LEFT JOIN Orders ON
+					Accounts.Account_Id = Orders.Account_Id AND Orders.Order_Id IN (1, 2, 3)
 		</select>
 
 		<resultMap id="Account-with-Orders" class="AccountWithOrders" groupBy="Account_ID">
