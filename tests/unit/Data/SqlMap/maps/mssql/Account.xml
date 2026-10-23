@@ -561,6 +561,12 @@
 					accounts.account_id = orders.account_id
 		</select>
 
+		<select id="getAccountWithEarlyOrders" resultMap="Account-with-Orders">
+			SELECT * FROM accounts 
+				LEFT JOIN orders ON
+					accounts.account_id = orders.account_id AND orders.order_id IN (1, 2, 3)
+		</select>
+
 		<resultMap id="Account-with-Orders" class="AccountWithOrders" groupBy="Account_ID">
 			<result property="Id"           column="Account_ID"/>
 			<result property="FirstName"    column="Account_FirstName"/>

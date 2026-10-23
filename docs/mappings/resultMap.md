@@ -136,6 +136,7 @@ A single SQL `JOIN` query can produce multiple rows per parent entity (one-to-ma
 - `groupBy` lists one or more property names whose combined values identify a unique parent row.
 - The child collection property must have `resultMapping` pointing to a separate `<resultMap>` for the child entity.
 - The collection property type must be `TList`, `array`, or another list-compatible type.
+- A child `<resultMap>` may have its own `groupBy` and nested collections. Its `groupBy` values are grouped within the parent, so the same child value under two parents gives two child objects.
 
 **Example — Account with Orders:**
 

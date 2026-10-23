@@ -666,9 +666,11 @@ class TMappedStatement extends \Prado\TComponent implements IMappedStatement
 	 * ResultMap with GroupBy property. Save object collection graph in a tree
 	 * and collect the result later. A nested result map without row data, such as
 	 * the right side of a LEFT JOIN with no match, adds no element to the collection.
+	 * The tree key of a nested element is prefixed with its parent key, so equal
+	 * `groupBy` values under different parents are separate elements.
 	 * @param TResultMap $resultMap result mapping details.
 	 * @param array $row a result set row retrieved from the database
-	 * @param mixed $parent
+	 * @param mixed $parent tree key of the parent element, null or '' for a root
 	 * @param object $resultObject the result object
 	 * @return object result object.
 	 */
@@ -679,6 +681,9 @@ class TMappedStatement extends \Prado\TComponent implements IMappedStatement
 		if (empty($parent)) {
 			$rootObject = ['object' => $resultObject, 'property' => null];
 			$this->_groupBy->add(null, $group, $rootObject);
+			$parentKey = $group;
+		} else {
+			$parentKey = $parent;
 		}
 
 		foreach ($resultMap->getColumns() as $property) {
@@ -692,7 +697,7 @@ class TMappedStatement extends \Prado\TComponent implements IMappedStatement
 				if (!$this->hasResultMapRowData($nestedMap, $row)) {
 					continue;
 				}
-				$groupKey = $this->getResultMapGroupKey($nestedMap, $row);
+				$groupKey = $parentKey . '.' . $this->getResultMapGroupKey($nestedMap, $row);
 
 				//add the node reference first
 				if (empty($parent)) {
@@ -722,6 +727,7 @@ class TMappedStatement extends \Prado\TComponent implements IMappedStatement
 	 * @param TResultMap $resultMap result mapping details.
 	 * @param array $row a result set row retrieved from the database
 	 * @return bool true if a mapped column is not null or the map has no column mappings.
+	 * @since 4.4.0
 	 */
 	protected function hasResultMapRowData($resultMap, $row)
 	{

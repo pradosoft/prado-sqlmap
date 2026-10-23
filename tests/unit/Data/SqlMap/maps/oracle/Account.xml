@@ -595,6 +595,29 @@
 					accounts.account_id = orders.account_id
 		</select>
 
+		<select id="getAccountWithEarlyOrders" resultMap="Account-with-Orders">
+			SELECT
+				Accounts.Account_Id as Account_Id,
+				Accounts.Account_FirstName as Account_FirstName,
+				Accounts.Account_LastName as Account_LastName,
+				Accounts.Account_Email as Account_Email,
+				Accounts.Account_Banner_Option as Account_Banner_Option,
+				Accounts.Account_Cart_Option as Account_Cart_Option,
+				Orders.Order_Id as Order_Id,
+				Orders.Order_Date as Order_Date,
+				Orders.Order_CardType as Order_CardType,
+				Orders.Order_CardNumber as Order_CardNumber,
+				Orders.Order_CardExpiry as Order_CardExpiry,
+				Orders.Order_Street as Order_Street,
+				Orders.Order_City as Order_City,
+				Orders.Order_Province as Order_Province,
+				Orders.Order_PostalCode as Order_PostalCode,
+				Orders.Order_FavouriteLineItem as Order_FavouriteLineItem
+				FROM accounts
+				LEFT JOIN orders ON
+					accounts.account_id = orders.account_id AND orders.order_id IN (1, 2, 3)
+		</select>
+
 		<resultMap id="Account-with-Orders" class="AccountWithOrders" groupBy="Account_Id">
 			<result property="Id"           column="Account_Id"/>
 			<result property="FirstName"    column="Account_FirstName"/>
