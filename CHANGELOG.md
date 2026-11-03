@@ -20,6 +20,8 @@ First standalone release, planned as 1.0.0, for PRADO 4.4. SqlMap moves out of t
 ### Changed
 
 - `TSqlMapException::getErrorCode()` returns the message code (for example `sqlmap_contains_no_statement`). It previously returned the translated message text.
+- `messages.txt` entries are ICU MessageFormat patterns (pradosoft/prado#1437): `'{0}'` is `''{0}''`. Messages render as before. Under PRADO 4.3, `TSqlMapException::translateErrorMessage()` returns `''` as `'`.
+- Active Record support is the `pradosoft/prado-activerecord` package (pradosoft/prado#1359). It is a suggested package and a development dependency for the Active Record SqlMap tests.
 
 ### Fixed
 

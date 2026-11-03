@@ -57,6 +57,24 @@ class TSqlMapException extends TException
 	}
 
 	/**
+	 * Returns the message of an error code. The message file holds ICU MessageFormat
+	 * patterns, where an apostrophe beside a brace is doubled (`''{0}''`).
+	 * - PRADO 4.4 formats the pattern with `\MessageFormatter`.
+	 * - PRADO 4.3 substitutes `{n}` without ICU formatting, so `''` is returned as `'`.
+	 * @param string $key the error code.
+	 * @return string the message of the error code.
+	 * @since 4.4.0
+	 */
+	protected function translateErrorMessage($key)
+	{
+		$message = parent::translateErrorMessage($key);
+		if (!method_exists(TException::class, 'formatErrorMessage')) {
+			$message = str_replace("''", "'", $message);
+		}
+		return $message;
+	}
+
+	/**
 	 * @return string path to the error message file
 	 */
 	protected function getErrorMessageFile()

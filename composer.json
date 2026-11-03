@@ -48,7 +48,11 @@
 		"phpunit/phpunit": "^10",
 		"phpdocumentor/shim": "^3",
 		"friendsofphp/php-cs-fixer": "^3.94",
-		"phpstan/phpstan": "^2.1"
+		"phpstan/phpstan": "^2.1",
+		"pradosoft/prado-activerecord": "dev-main"
+	},
+	"suggest": {
+		"pradosoft/prado-activerecord": "Active Record objects as SqlMap result and parameter classes"
 	},
 	"config": {
 		"platform": {

@@ -168,6 +168,7 @@ tests/
 - **Package version** — `TSqlMapManager::VERSION` is the package version. Bump it with each release; `TSqlMapConfig` discards cached managers built by another version.
 - **Uniform Access Principal / Self Encapsulation** required — access own properties via getters/setters, not raw `$this->_prop`.
 - **Error codes** for PRADO exceptions are defined in `src/Data/SqlMap/DataMapper/messages.txt`.
+- **Messages are ICU MessageFormat patterns** (PRADO 4.4 formats them with `\MessageFormatter`): an apostrophe beside a brace is doubled, `''{0}''`; a literal brace is quoted.
 - **`@author` tags** — only Wei Zhuo, Brad Anderson, and Fabio Bas are listed as extension authors.
 
 ## Test Bootstrap

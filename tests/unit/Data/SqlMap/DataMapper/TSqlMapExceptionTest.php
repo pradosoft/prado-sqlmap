@@ -58,6 +58,31 @@ class TSqlMapExceptionTest extends PHPUnit\Framework\TestCase
 		);
 	}
 
+	public function testMessagesAreIcuPatternsThatRenderEveryArgument()
+	{
+		$file = dirname(__DIR__, 5) . '/src/Data/SqlMap/DataMapper/messages.txt';
+		$checked = 0;
+		foreach (file($file, FILE_IGNORE_NEW_LINES) as $line) {
+			if (!preg_match('/^\s*(\w+)\s*=\s*(.*)$/', $line, $m)) {
+				continue;
+			}
+			[, $key, $pattern] = $m;
+			preg_match_all('/\{(\d+)\}/', $pattern, $placeholders);
+			$args = [];
+			foreach ($placeholders[1] as $i) {
+				$args[(int) $i] = 'arg' . $i;
+			}
+			$formatted = \MessageFormatter::formatMessage('en', $pattern, $args);
+			$this->assertNotFalse($formatted, "$key is not a valid ICU MessageFormat pattern.");
+			foreach ($args as $arg) {
+				$this->assertStringContainsString($arg, $formatted, "$key does not render $arg.");
+			}
+			$this->assertStringNotContainsString("''", $formatted, "$key renders a doubled apostrophe.");
+			$checked++;
+		}
+		$this->assertGreaterThan(0, $checked);
+	}
+
 	public function testMessagesNotInFrameworkFileTranslate()
 	{
 		$snapshot = PradoUnit::snapshotStatic(TException::class);
