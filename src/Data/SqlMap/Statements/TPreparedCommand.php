@@ -10,8 +10,9 @@
 
 namespace Prado\Data\SqlMap\Statements;
 
-use Prado\Data\Common\TDbCommandBuilder;
+use Prado\Data\Common\IDbCommandBuilder;
 use Prado\Data\Common\TDbMetaData;
+use Prado\Data\SqlMap\DataMapper\TSqlMapExecutionException;
 use Prado\Data\SqlMap\TSqlMapManager;
 use Prado\Prado;
 
@@ -37,6 +38,9 @@ class TPreparedCommand
 
 		if ($max !== null || $skip !== null) {
 			$builder = TDbMetaData::getInstance($connection)->createCommandBuilder();
+			if (!$builder instanceof IDbCommandBuilder) {
+				throw new TSqlMapExecutionException('sqlmap_limit_offset_unsupported', $builder::class);
+			}
 			$sql = $builder->applyLimitOffset($sql, $max, $skip);
 		}
 		$command = $connection->createCommand($sql);
@@ -61,12 +65,13 @@ class TPreparedCommand
 				}
 				$dbType = $property->getDbType();
 				if ($dbType == '') { //relies on PHP lax comparison
-					$pdoType = TDbCommandBuilder::getPdoType($value);
-					if ($pdoType === \PDO::PARAM_NULL && $driverName === 'ibm') {
-						// pdo_ibm rejects PDO::PARAM_NULL; it binds a null PDO::PARAM_STR as SQL NULL.
-						$pdoType = \PDO::PARAM_STR;
+					// null: the driver takes untyped parameters, as pdo_ibm does for a null.
+					$pdoType = $command->getColumnTypeFromValue($value);
+					if ($pdoType !== null) {
+						$command->bindValue($i + 1, $value, $pdoType);
+					} else {
+						$command->bindValue($i + 1, $value);
 					}
-					$command->bindValue($i + 1, $value, $pdoType);
 				} elseif (strpos($dbType, 'PDO::') === 0) {
 					$command->bindValue($i + 1, $value, constant($property->getDbType()));
 				} //assumes PDO types, e.g. PDO::PARAM_INT

@@ -2,7 +2,7 @@
 
 # Statements
 
-SqlMap supports five statement types for executing SQL: [`select`](select.md), [`insert`](insert.md), [`update`](update.md), [`delete`](delete.md), and [`statement`](statement.md) (generic). A sixth element, [`selectKey`](insert.md#selectkey), appears only as a child of `insert` and retrieves generated key values before or after the insert executes.
+SqlMap supports seven statement types for executing SQL: [`select`](select.md), [`insert`](insert.md), [`insertOrIgnore` and `upsert`](upsert.md), [`update`](update.md), [`delete`](delete.md), and [`statement`](statement.md) (generic). The [`selectKey`](insert.md#selectkey) element appears only as a child of `insert`, `insertOrIgnore`, or `upsert` and retrieves generated key values before or after the insert executes.
 
 All statement elements share a common set of attributes, and all are defined inside a [mapping file](../mappings/README.md) as children of the root `<sqlMap>` element.
 
@@ -30,6 +30,8 @@ All statement elements share a common set of attributes, and all are defined ins
 |---|---|---|
 | [`select`](select.md) | `queryForObject`, `queryForList`, `queryForMap`, `queryForPagedList` | Reads rows; result mapping applied; supports caching. |
 | [`insert`](insert.md) | `insert` | Writes one row; optional `<selectKey>` child returns the generated key. |
+| [`insertOrIgnore`](upsert.md) | `insert` | Writes one row unless it conflicts with an existing key. |
+| [`upsert`](upsert.md) | `insert` | Writes one row, or updates the row it conflicts with. |
 | [`update`](update.md) | `update` | Modifies rows; returns affected-row count. |
 | [`delete`](delete.md) | `delete` | Removes rows; returns affected-row count. |
 | [`statement`](statement.md) | `queryForObject`, `queryForList`, `insert`, `update`, `delete` | Generic; use when the DML type is variable or unknown at mapping time. |
