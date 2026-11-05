@@ -3,8 +3,13 @@ set -euo pipefail
 
 SQLCMD=/opt/mssql-tools18/bin/sqlcmd
 
-curl -sSL -O https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
+# msodbcsql18 (pulled in by mssql-tools18) is the ODBC driver pdo_sqlsrv needs.
+# The repo package must match the runner's Ubuntu release; ubuntu-latest
+# rolls between releases. Newer images preinstall packages-microsoft-prod
+# with its keyring deleted, so the conffile flags reinstall it without a prompt.
+. /etc/os-release
+curl -sSL -O "https://packages.microsoft.com/config/ubuntu/${VERSION_ID}/packages-microsoft-prod.deb"
+sudo dpkg -i --force-confnew --force-confmiss packages-microsoft-prod.deb
 sudo apt-get update -qq
 sudo ACCEPT_EULA=Y apt-get install -y mssql-tools18 unixodbc-dev
 
