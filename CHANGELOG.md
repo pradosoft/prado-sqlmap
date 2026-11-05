@@ -10,15 +10,19 @@ First standalone release, planned as 1.0.0, for PRADO 4.4. SqlMap moves out of t
 
 ### Added
 
+- `<insertOrIgnore>` and `<upsert>` mapping elements, from PRADO's Data layer renovation for 4.4 (pradosoft/prado#1088). They run through `TSqlMapGateway::insert()` as an `<insert>` does, with the driver's own conflict SQL. `<upsert>` takes `updateColumns` and `conflictColumns` attributes. Classes: `TSqlMapInsertOrIgnore`, `TSqlMapUpsert`, `TInsertOrIgnoreMappedStatement`, `TUpsertMappedStatement`. See [insertOrIgnore and upsert](docs/statements/upsert.md).
 - `TSqlMapManager::VERSION` holds the package version and `TSqlMapManager::getVersion()` (the `Version` property) returns the version that built the manager, in the form of `Prado::getVersion()`. The version is serialized with the manager. `TSqlMapConfig` discards a cached manager whose version is not `VERSION` and rebuilds it, so the application cache does not need to be cleared after an upgrade.
 - An `<insert>`, `<update>`, or `<delete>` statement with a `cacheModel` attribute flushes that cache model when it executes, the same as a `<flushOnExecute>` entry. The attribute was previously accepted and ignored (#5).
 - `composer.json` declares `extra.prado` for PRADO 4.4: `bootstrap` (`TSqlMapConfig`), `error-messages` (`src/Data/SqlMap/DataMapper/messages.txt`), and `class-map` (`config/classes.json`). The legacy top-level `extra.bootstrap` remains for PRADO 4.3.
-- `config/classes.json` maps the 55 SqlMap short class names (`TSqlMapConfig`, `TSqlMapFifoCache`, ...) to their FQNs. It replaces the SqlMap entries of the framework's `classes.php`.
+- `config/classes.json` maps the 59 SqlMap short class names (`TSqlMapConfig`, `TSqlMapFifoCache`, ...) to their FQNs. It replaces the SqlMap entries of the framework's `classes.php`.
 - Message text for five codes that were thrown without a definition: `sqlmap_can_not_extend_select_key`, `sqlmap_configfile_invalid`, `sqlmap_must_enable_custom_paging`, `sqlmap_property_must_be_list`, `sqlmap_use_set_to_store_cache`.
 - `TSqlMapException` accepts the `TException` argument forms: an optional integer error code first, and a trailing `Throwable` as the previous exception.
 
 ### Changed
 
+- A parameter without a `dbType` binds with the type from PRADO 4.4's `TDbCommand::getColumnTypeFromValue()` when the command provides it; otherwise as before.
+- Paging through a connection whose command builder is not an SQL builder throws `TSqlMapExecutionException` `sqlmap_limit_offset_unsupported`.
+- The configuration and statement classes leave properties out of serialization through `_getZappableSleepProps()`, so `TComponent` also leaves out its default state.
 - `TSqlMapException::getErrorCode()` returns the message code (for example `sqlmap_contains_no_statement`). It previously returned the translated message text.
 - `messages.txt` entries are ICU MessageFormat patterns (pradosoft/prado#1437): `'{0}'` is `''{0}''`. Messages render as before. Under PRADO 4.3, `TSqlMapException::translateErrorMessage()` returns `''` as `'`.
 - Active Record support is the `pradosoft/prado-activerecord` package (pradosoft/prado#1359). It is a suggested package and a development dependency for the Active Record SqlMap tests.
@@ -31,7 +35,7 @@ First standalone release, planned as 1.0.0, for PRADO 4.4. SqlMap moves out of t
 - Firebird: a boolean parameter binds as `0` or `1`. `pdo_firebird` binds a PHP boolean only to a `BOOLEAN` column.
 - `TCachingStatement` builds cache keys from the SQL text. It previously serialized the prepared command, which threw "Serialization of 'PDOStatement' is not allowed" for any cached statement with bound parameters.
 - `TCachingStatement::executeInsert()` delegates to the wrapped statement. It previously called itself until the stack overflowed.
-- `TParameterProperty::__sleep()` and `TResultProperty::__sleep()` name private properties by their namespaced class, so properties at their default values are left out of the serialized form. `TResultProperty` also misspelled `_propertyName`.
+- `TParameterProperty` and `TResultProperty` name private properties by their namespaced class, so properties at their default values are left out of the serialized form. `TResultProperty` also misspelled `_propertyName`.
 - `TResultProperty::getPropertyValueType()` no longer calls a method on `null` when no reflection class is found for the type.
 - A `groupBy` result map no longer adds an element to a nested collection when every column of the nested result map is null, as in a LEFT JOIN row with no match. The collection stays empty. A parent row with no nested elements is still returned, in query order (#4).
 - A nested result map with its own `groupBy` groups within its parent. The same `groupBy` value under two parents previously shared one tree key, so the second parent lost the element and the first parent's element was replaced.

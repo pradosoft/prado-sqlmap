@@ -69,3 +69,4 @@ sqlmap_configfile_invalid				= SQLMap configuration file or namespace ''{0}'' is
 sqlmap_must_enable_custom_paging		= TSqlMapPagedList always uses custom paging; CustomPaging cannot be changed.
 sqlmap_property_must_be_list			= A grouped result property must be an array or TList to hold child objects.
 sqlmap_use_set_to_store_cache			= Use set() to store items in the SQLMap cache; add() is not supported.
+sqlmap_limit_offset_unsupported			= Command builder ''{0}'' cannot apply a limit or offset; SqlMap needs an SQL command builder.

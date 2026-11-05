@@ -12,7 +12,7 @@ SqlMap is a data-mapper layer that maps SQL statements defined in XML files to P
 | [Prado Integration](integration.md) | Registering `TSqlMapConfig` as a PRADO application module, connection configuration, and caching the parsed manager |
 | [Quick Start](quickstart.md) | Minimal working example: config file, mapping file, and PHP calls |
 | [Configuration](configuration/README.md) | `sqlMapConfig` root file reference — properties, type aliases, type handlers, transaction manager, data source, and `sqlMaps` includes |
-| [Statements](statements/README.md) | `select`, `insert`, `update`, `delete`, `statement`, and `procedure` tags; `selectKey`; `TSqlMapGateway` PHP API |
+| [Statements](statements/README.md) | `select`, `insert`, `insertOrIgnore`, `upsert`, `update`, `delete`, `statement`, and `procedure` tags; `selectKey`; `TSqlMapGateway` PHP API |
 | [Mappings](mappings/README.md) | `resultMap`, `parameterMap`, inline parameter syntax, discriminators, and sub-maps |
 | [Dynamic SQL](dynamic-sql/README.md) | `dynamic`, conditional tags (`isNull`, `isEqual`, `iterate`, etc.), and inline substitution tokens |
 
@@ -43,7 +43,9 @@ SqlMap is a data-mapper layer that maps SQL statements defined in XML files to P
 | `parameter` | `parameterMap` | Declares one parameter: property, db type, null value, and mode | [Mappings](mappings/README.md#parameter) |
 | `select` | `sqlMap` | Mapped `SELECT` statement; returns one object or a list | [Statements](statements/README.md#select) |
 | `insert` | `sqlMap` | Mapped `INSERT` statement; optionally returns a generated key | [Statements](statements/README.md#insert) |
-| `selectKey` | `insert` | Executes a query to retrieve the generated primary key | [Statements](statements/README.md#selectkey) |
+| `insertOrIgnore` | `sqlMap` | Mapped `INSERT` that skips a conflicting row | [insertOrIgnore and upsert](statements/upsert.md) |
+| `upsert` | `sqlMap` | Mapped `INSERT` that updates a conflicting row | [insertOrIgnore and upsert](statements/upsert.md) |
+| `selectKey` | `insert`, `insertOrIgnore`, `upsert` | Executes a query to retrieve the generated primary key | [Statements](statements/README.md#selectkey) |
 | `update` | `sqlMap` | Mapped `UPDATE` statement; returns affected-row count | [Statements](statements/README.md#update) |
 | `delete` | `sqlMap` | Mapped `DELETE` statement; returns affected-row count | [Statements](statements/README.md#delete) |
 | `statement` | `sqlMap` | Generic mapped statement for any SQL that does not fit a specific DML tag | [Statements](statements/README.md#statement) |
