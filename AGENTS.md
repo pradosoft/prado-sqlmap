@@ -49,7 +49,7 @@ Run `composer fix` before `composer fulltest` to auto-apply style fixes; `fullte
 
 - Indentation: **tabs** (not spaces)
 - Line endings: Unix `\n`
-- PHP 8.1+ syntax; CI tests 8.1, 8.2, 8.3
+- PHP 8.2+ syntax; CI tests 8.2, 8.3, 8.4, 8.5
 - PSR-12 enforced via php-cs-fixer
 - Uniform Access / Self Encapsulation: access own fields only through getters/setters, never `$this->_prop` directly in subclasses
 

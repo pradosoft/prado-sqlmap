@@ -11,7 +11,6 @@
 namespace Prado\Data\SqlMap\Statements;
 
 use Prado\Data\Common\IDbCommandBuilder;
-use Prado\Data\Common\TDbCommandBuilder;
 use Prado\Data\Common\TDbMetaData;
 use Prado\Data\SqlMap\DataMapper\TSqlMapExecutionException;
 use Prado\Data\SqlMap\TSqlMapManager;
@@ -39,7 +38,7 @@ class TPreparedCommand
 
 		if ($max !== null || $skip !== null) {
 			$builder = TDbMetaData::getInstance($connection)->createCommandBuilder();
-			if (!($builder instanceof IDbCommandBuilder || $builder instanceof TDbCommandBuilder)) {
+			if (!$builder instanceof IDbCommandBuilder) {
 				throw new TSqlMapExecutionException('sqlmap_limit_offset_unsupported', $builder::class);
 			}
 			$sql = $builder->applyLimitOffset($sql, $max, $skip);
@@ -66,7 +65,8 @@ class TPreparedCommand
 				}
 				$dbType = $property->getDbType();
 				if ($dbType == '') { //relies on PHP lax comparison
-					$pdoType = $this->getParameterType($command, $value, $driverName);
+					// null: the driver takes untyped parameters, as pdo_ibm does for a null.
+					$pdoType = $command->getColumnTypeFromValue($value);
 					if ($pdoType !== null) {
 						$command->bindValue($i + 1, $value, $pdoType);
 					} else {
@@ -80,28 +80,5 @@ class TPreparedCommand
 				}
 			}
 		}
-	}
-
-	/**
-	 * Returns the PDO type to bind a parameter value with.
-	 * PRADO 4.4's `TDbCommand::getColumnTypeFromValue()` decides when the command provides it.
-	 * Otherwise the type follows the value, and a null binds as a string on `ibm`,
-	 * because pdo_ibm rejects PDO::PARAM_NULL and binds a null string as SQL NULL.
-	 * @param \Prado\Data\TDbCommand $command the command the value binds to.
-	 * @param mixed $value the parameter value.
-	 * @param string $driverName the PDO driver name of the command's connection.
-	 * @return ?int the PDO::PARAM_* type, or null to bind without a type.
-	 * @since 4.4.0
-	 */
-	protected function getParameterType($command, $value, $driverName)
-	{
-		if (method_exists($command, 'getColumnTypeFromValue')) {
-			return $command->getColumnTypeFromValue($value);
-		}
-		$pdoType = TDbCommandBuilder::getPdoType($value);
-		if ($pdoType === \PDO::PARAM_NULL && $driverName === 'ibm') {
-			$pdoType = \PDO::PARAM_STR;
-		}
-		return $pdoType;
 	}
 }

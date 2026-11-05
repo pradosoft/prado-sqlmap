@@ -20,11 +20,12 @@ First standalone release, planned as 1.0.0, for PRADO 4.4. SqlMap moves out of t
 
 ### Changed
 
-- A parameter without a `dbType` binds with the type from PRADO 4.4's `TDbCommand::getColumnTypeFromValue()` when the command provides it; otherwise as before.
+- The package requires PRADO 4.4 (`"pradosoft/prado": "^4.4@dev"` until 4.4 is tagged) and therefore PHP 8.2.
+- A parameter without a `dbType` binds with the type from `TDbCommand::getColumnTypeFromValue()`, which binds a null untyped on IBM DB2.
 - Paging through a connection whose command builder is not an SQL builder throws `TSqlMapExecutionException` `sqlmap_limit_offset_unsupported`.
 - The configuration and statement classes leave properties out of serialization through `_getZappableSleepProps()`, so `TComponent` also leaves out its default state.
 - `TSqlMapException::getErrorCode()` returns the message code (for example `sqlmap_contains_no_statement`). It previously returned the translated message text.
-- `messages.txt` entries are ICU MessageFormat patterns (pradosoft/prado#1437): `'{0}'` is `''{0}''`. Messages render as before. Under PRADO 4.3, `TSqlMapException::translateErrorMessage()` returns `''` as `'`.
+- `messages.txt` entries are ICU MessageFormat patterns (pradosoft/prado#1437): `'{0}'` is `''{0}''`. Messages render as before.
 - Active Record support is the `pradosoft/prado-activerecord` package (pradosoft/prado#1359). It is a suggested package and a development dependency for the Active Record SqlMap tests.
 
 ### Fixed
