@@ -24,6 +24,8 @@ use Prado\Data\SqlMap\Statements\IMappedStatement;
 use Prado\Prado;
 
 /**
+ * TSqlMapManager class
+ *
  * TSqlMapManager class holds the sqlmap configuation result maps, statements
  * parameter maps and a type handler factory.
  *
@@ -44,6 +46,7 @@ use Prado\Prado;
  *
  * @author Wei Zhuo <weizhuo[at]gmail[dot]com>
  * @since 3.1
+ * see https://github.com/mybatis/
  */
 class TSqlMapManager extends \Prado\TComponent
 {

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap>
+	<cacheModel id="upsert-cache" implementation="LRU" />
+
+	<select id="SelectItem" resultClass="array">
+		SELECT name, score FROM upsert_items WHERE name = #value#
+	</select>
+
+	<insertOrIgnore id="InsertOrIgnoreItem" cacheModel="upsert-cache">
+		INSERT OR IGNORE INTO upsert_items (name, score) VALUES (#name#, #score#)
+	</insertOrIgnore>
+
+	<upsert id="UpsertItem" updateColumns="score, note" conflictColumns="name" cacheModel="upsert-cache">
+		INSERT INTO upsert_items (name, score) VALUES (#name#, #score#)
+		ON CONFLICT (name) DO UPDATE SET score = excluded.score
+	</upsert>
+
+	<upsert id="UpsertDefaults">
+		INSERT INTO upsert_items (name, score) VALUES (#name#, #score#)
+		ON CONFLICT (name) DO NOTHING
+	</upsert>
+
+	<upsert id="UpsertWithKey">
+		INSERT INTO upsert_items (name, score) VALUES (#name#, #score#)
+		ON CONFLICT (name) DO UPDATE SET score = excluded.score
+		<selectKey property="item_id" type="post" resultClass="int">
+			SELECT item_id FROM upsert_items WHERE name = #name#
+		</selectKey>
+	</upsert>
+</sqlMap>

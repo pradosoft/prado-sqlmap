@@ -346,9 +346,9 @@ class TResultProperty extends \Prado\TComponent
 		return $this->getPropertyValueType() == self::ARRAY_TYPE;
 	}
 
-	public function __sleep()
+	protected function _getZappableSleepProps(&$exprops)
 	{
-		$exprops = [];
+		parent::_getZappableSleepProps($exprops);
 		$cn = __CLASS__;
 		if ($this->_nullValue === null) {
 			$exprops[] = "\0$cn\0_nullValue";
@@ -380,6 +380,5 @@ class TResultProperty extends \Prado\TComponent
 		if ($this->_select === null) {
 			$exprops[] = "\0$cn\0_select";
 		}
-		return array_diff(parent::__sleep(), $exprops);
 	}
 }

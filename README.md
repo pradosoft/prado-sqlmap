@@ -6,8 +6,8 @@ SqlMap maps SQL statements to PHP objects using XML configuration files. Queries
 
 ## Requirements
 
-- PHP 8.1 or later
-- PRADO 4.3.3 or later (`pradosoft/prado`)
+- PHP 8.2 or later
+- PRADO 4.4 or later (`pradosoft/prado`)
 - PDO extension and a PDO driver for your database
 
 ## Installation
